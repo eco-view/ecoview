@@ -39,7 +39,7 @@ python3 app.py
 ```
 
 By default, the server will run on port 8080
-Open a web browser and make sure the site is reachable
+
 ```
 http://localhost:8080/
 ```
