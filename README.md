@@ -5,11 +5,13 @@
 - Peripherals Lead: Lee Yanting
 - Microcontroller Lead: Justin Struzik
 
-### Abstract
 ### Overview
-### Setup
+- Abstract
+- Architecture
+- Setup
+
 ### Stack
-### Website
-### Database
-### Image Processing
-### Communication
+- Website
+– Database
+- Image Processing
+- Communication
