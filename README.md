@@ -1,6 +1,9 @@
 # :recycle: ecoview :recycle:
 ## UB Electrical Engineering Capstone Design, Spring 2019
-**Michael Lawrenson   Osama Abaali   Lee Yanting   Justin Struzik**
+- Software Lead: Michael Lawrenson
+- Image Acquisition Lead: Osama Abaali
+- Peripherals Lead: Lee Yanting
+- Microcontroller Lead: Justin Struzik
 
 ### Abstract
 ### Overview
