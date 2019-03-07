@@ -1,0 +1,52 @@
+~~~~~~~~~~~~~~
+~~~ state ~~~~
+
+PI:
+cron RUN Read_Current_State.py
+  read pin values for TOTE_LEVEL
+  access TOTE_TALLY current value
+  create URL_STRING
+  send URL request URL_STRING
+
+~~~~~~~~~~~~~~~
+~~~ process ~~~
+
+PI:
+  detatch LISTENER Gather_Object_Image.py
+    WHEN sensor ~
+      FILENAME_RAW = assign TIME_STAMP to string
+      set Camera_Light ON
+      raspistill | autofocus, saturation, light_adjustment
+      raspistill delay()
+      raspistill CAPTURE | save to Raw_Images.folder/FILENAME_RAW
+
+      RUN Format_Image(FILENAME_RAW)
+      modify filename
+      TAR Scrubbed_Image
+      COPY Scrubbed_Image to IMAGE_SET.folder
+      SAVE Scrubbed_Image.tar to Scrubbed_Image.folder/FILENAME
+
+    WHEN Scrubbed_Image.folder ~EMPTY
+      TRANSMIT Scrubbed_Image TO MAC
+      REMOVE Scrubbed_Image from folder
+
+  // time-out start for Image_Result
+
+MAC:
+  detatch LISTENER Analyze_Image.py
+    WHEN folder ~empty
+      RUN image thru model
+      // maybe: save to backup archive folder
+      RETURN Image_Result
+      TRANSMIT Image_Result
+      REMOVE Scrubbed_Image from folder
+
+PI:
+  // if time-out has not expired
+    PROCESS Image_Result
+    DISPLAY appropriate LEDs
+    return to rest state
+
+NOTES:
+If you want something more realtime you can use inotify via inotifywait or inotifywatch in a script.
+      This. Either that or use incron if your distro has it packaged.

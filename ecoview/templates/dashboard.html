@@ -1,0 +1,89 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<h1>Dashboard <small>Welcome {{session.username}}</small></h1>
+<hr>
+<table>
+<tr>
+  <td><a class="btn btn-success" href="/add_device">Add Device</a></td>
+  <td><a class="btn btn-success" href="/add_article">Add Article</a></td>
+  <td><form action="{{url_for('reset_state')}}" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="Reset State" class="btn btn-danger">
+  </form></td>
+  <td><form action="{{url_for('reset_process')}}" method="post">
+  <input type="hidden" name="_method" value="DELETE">
+  <input type="submit" value="Reset Process" class="btn btn-danger">
+  </form></td>
+</tr>
+</table>
+
+
+<hr>
+<h3>Device Database</h3>
+<table class="table table-striped">
+  <tr>
+    <th>ID</th>
+    <th>Machine</th>
+    <th>Nickname</th>
+    <th>Created</th>
+    <th>IP</th>
+    <th>Token</th>
+    <th>Latitude</th>
+    <th>Longitude</th>
+    <th>Config</th>
+  </tr>
+  {% for device in devices %}
+  <tr>
+    <td>{{device.id}}</td>
+    <td>{{device.machine}}</td>
+    <td>{{device.nickname}}</td>
+    <td>{{device.time}}</td>
+    <td>{{device.ip_address}}</td>
+    <td>{{device.token}}</td>
+    <td>{{device.latitude}}</td>
+    <td>{{device.longitude}}</td>
+    <td>{{device.configvariables}}</td>
+    <td><a href="edit_device/{{device.id}}" class="btn btn-default pull-right">Edit</a></td>
+    <td>
+<form action="{{url_for('delete_device', id=device.id)}}" method="post">
+<input type="hidden" name="_method" value="DELETE">
+<input type="submit" value="DELETE" class="btn btn-danger">
+</form>
+    </td>
+    <td></td>
+  </tr>
+  {% endfor %}
+</table>
+<div></div>
+<!--  -->
+<hr>
+<h3>Articles</h3>
+<table class="table table-striped">
+  <tr>
+    <th>ID</th>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Date</th>
+    <th></th>
+    <th></th>
+  </tr>
+  {% for article in articles %}
+  <tr>
+    <td>{{article.id}}</td>
+    <td>{{article.title}}</td>
+    <td>{{article.author}}</td>
+    <td>{{article.create_date}}</td>
+    <td><a href="edit_article/{{article.id}}" class="btn btn-default pull-right">Edit</a></td>
+    <td>
+<form action="{{url_for('delete_article', id=article.id)}}" method="post">
+<input type="hidden" name="_method" value="DELETE">
+<input type="submit" value="DELETE" class="btn btn-danger">
+</form>
+    </td>
+    <td></td>
+  </tr>
+  {% endfor %}
+</table>
+<hr>
+{% endblock %}

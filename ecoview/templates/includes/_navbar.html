@@ -1,0 +1,61 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <!-- SITE NAME & LOGO IMAGE -->
+  <a class="navbar-brand" href="/">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/44/Recycle001.svg/440px-Recycle001.svg.png" width="30" height="30" class="d-inline-block align-top" alt="">
+    EcoView</a>
+
+  <!-- MOUSE-OVER BEHAVIOR -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <!-- NAVBAR LEFT -->
+  <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+      <li class="nav-item"><a class="nav-link" href="/articles">Articles</a></li>
+      <li class="nav-item"><a class="nav-link" href="/state">State</a></li>
+      <li class="nav-item"><a class="nav-link" href="/process">Process</a></li>
+    </ul>
+  </div>
+  <!-- NAVBAR RIGHT -->
+  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="/api">API</a></li>
+      {% if session.logged_in %}
+      <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+      <!-- <li class="nav-item"><a class="nav-link" href="/add_device">Add Device</a></li> -->
+      <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
+      {% else %}
+      <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+      <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+
+<!-- LECACY -->
+<!-- <nav class="navbar navbar-default">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">MyFlaskApp</a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/articles">Articles</a></li </ul> <ul class="nav navbar-nav navbar-right">
+        <li><a href="/register">Register</a></li>
+        <li><a href="/login">Login</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+ -->
