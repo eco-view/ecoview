@@ -1,4 +1,4 @@
-# arduino
+# ecoview
 ## UB Electrical Engineering Capstone Design, Spring 2019
 
 ### Abstract
