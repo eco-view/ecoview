@@ -1,6 +1,7 @@
 # :recycle: ecoview :recycle:
 
 Cloud-based recycling module with object classification
+
 UB Electrical Engineering Capstone Design, Spring 2019
 - Software Lead: Michael Lawrenson
 - Image Acquisition Lead: Osama Abaali
