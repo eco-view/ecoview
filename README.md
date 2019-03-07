@@ -1,6 +1,6 @@
 # :recycle: ecoview :recycle:
 ## UB Electrical Engineering Capstone Design, Spring 2019
-**Michael Lawrenson**
+**Michael Lawrenson   Osama Abaali   Lee Yanting   Justin Struzik**
 
 ### Abstract
 ### Overview
