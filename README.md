@@ -70,9 +70,12 @@ Add additional notes about how to deploy this on a live system
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Python](https://www.python.org/) - Primary language
+* [Heroku](https://www.heroku.com/) - Server backend
+* [Flask](http://flask.pocoo.org/) - Web framework
+* [MySQL](https://www.mysql.com/) - Used to manage database
+* [Tensorflow](https://www.tensorflow.org/) - Image processing
+* [Bootstrap](https://getbootstrap.com/) - Visual styling
 
 ## Contributing
 
@@ -88,8 +91,6 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Osama Abaali** - *Image Lead* - [PurpleBooth](https://github.com/PurpleBooth)
 * **Lee Yanting** - *IPeripherals Lead* - [PurpleBooth](https://github.com/PurpleBooth)
 * **Justin Struzik** - *Microcontroller Lead* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 
 
