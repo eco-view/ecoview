@@ -1,25 +1,11 @@
 # :recycle: ecoview :recycle:
-## UB Electrical Engineering Capstone Design, Spring 2019
+
+Cloud-based recycling module with object classification
+UB Electrical Engineering Capstone Design, Spring 2019
 - Software Lead: Michael Lawrenson
 - Image Acquisition Lead: Osama Abaali
 - Peripherals Lead: Lee Yanting
 - Microcontroller Lead: Justin Struzik
-
-### Overview
-- Abstract
-- Architecture
-- Setup
-
-### Stack
-- Website
-– Database
-- Image Processing
-- Communication
-
-# :recycle: ecoview :recycle:
-
-Cloud-based recycling module with object classification
-UB Electrical Engineering Capstone Design, Spring 2019
 
 ## Getting Started
 
@@ -32,28 +18,31 @@ Make sure you have all the required python modules
 pip install flask flask_restful flask_mysql flask_mysqldb flask_table wtforms passlib functools json
 ```
 
-Make sure framework is in place
-```
-install mysql
-```
-
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
+Clone the repository to a local directory
 
 ```
-Give the example
+git clone ecoview
 ```
 
-And repeat
+Initialize SQL database
 
 ```
-until finished
+mysql.server start
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+Start the flask server
+
+```
+python3 app.py
+```
+
+By default, the server will run on port 8080
+Open a web browser and make sure the site is reachable
+```
+http://localhost:8080/
+```
 
 ## Running the tests
 
@@ -101,6 +90,19 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 * **Justin Struzik** - *Microcontroller Lead* - [PurpleBooth](https://github.com/PurpleBooth)
 
 See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+
+
+
+### Overview
+- Abstract
+- Architecture
+- Setup
+
+### Stack
+- Website
+– Database
+- Image Processing
+- Communication
 
 ## License
 
