@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, jsonify
+from flask import Flask, render_template, flash, redirect, url_for, session, request, logging, jsonify, Markup
 from flask_restful import Resource, Api
 from flask_mysqldb import MySQL
 from flask_table import Table, Col
@@ -6,10 +6,10 @@ from wtforms import Form, StringField, TextAreaField, PasswordField, validators
 from passlib.hash import sha256_crypt
 from functools import wraps
 import json
+import pygal
 
 
 app = Flask(__name__)
-api = Api(app)
 
 
 # 404 Error Handling
@@ -32,91 +32,71 @@ app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
 
-# API
-class HelloWorld(Resource):
-    def get(self):
-        info = {'about': 'ecoview is a cloud-based recycling project', 'api': 'ecoview employs a URL-based protocol for automatic data entry', 'access': '/api/...', 'assign': '=', 'delimit': '-'}
-        state_syntax = {'action': 'state', 'token': '<STRING>', 'machine': '<INT>', 'tote1level': '<INT>', 'tote1tally': '<INT>'}
-        process_syntax = {'action': 'process', 'token': '<STRING>', 'machine': '<INT>', 'filename': '<STRING>', 'modelresult': '<INT>', 'confidence': '<INT>', 'computetime': '<STRING>'}
-        examples = {'state': 'http://localhost:8080/api/token=abcde-action=state-machine=10001-tote1level=71-tote1tally=80',
-        'process': 'http://localhost:8080/api/token=abcde-action=process-machine=10001-filename=img001-modelresult=1-confidence=91-computetime-4'}
-        return [info, state_syntax, process_syntax, examples]
-    # def post(self):
-    #     some_json= request.get_json()
-    #     return {'you sent': some_json}, 201
+# # # api # # was # # here # # #
+
+# API SPLASH
+@app.route('/api')
+def api_splash():
+    return render_template('api_splash.html')
 
 
-class myApi(Resource):
-    def get(self, url_text):
-            # Try to parse dict from request
-            try:
-                url_text = request.url
-                new_list = url_text.split("api/")
-                key_value_list = new_list[1].split("-")
-                keys, values = zip(*(s.split("=") for s in key_value_list))
-                api_request_dict = dict(zip(keys, values))
-            except:
-                return {'Error': 'unable to parse request'}, 400
+# api POST method
+@app.route('/api', defaults={'path': ''})
+@app.route('/<path:path>')
+def api_post(path, methods='GET'):
+    try:
+        url_text = request.url
+        new_list = url_text.split("api/")
+        key_value_list = new_list[1].split("-")
+        keys, values = zip(*(s.split("=") for s in key_value_list))
+        api_request_dict = dict(zip(keys, values))
+    except:
+        return {'Error': 'unable to parse request'}, 400
 
-            # Check if potential verification pairs are present
-            try:
-                unverified_token = api_request_dict['token']
-                unverified_action = api_request_dict['action']
-                unverified_machine = api_request_dict['machine']
-            except:
-                return {'Error': 'insufficient credentials'}, 400
+    # Check if potential verification pairs are present
+    try:
+        unverified_token = api_request_dict['token']
+        unverified_action = api_request_dict['action']
+        # unverified_machine = api_request_dict['machine']
+    except:
+        return {'Error': 'insufficient credentials'}, 400
 
-            # Verify credentials
+    # Verify credentials
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT token, machine FROM devicedb")
+    verified_pairs = cur.fetchall()
+    verified_list = list(verified_pairs)
+    cur.close()
+    # Check if unverified_token is valid
+    if unverified_token not in str(verified_list):
+        return {'Error': 'invalid credentials'}, 400
+
+    # Determine POST type from 'action'
+    if unverified_action == 'state':
+        try:
             cur = mysql.connection.cursor()
-            result = cur.execute("SELECT token, machine FROM devicedb")
-            verified_pairs = cur.fetchall()
-            verified_list = list(verified_pairs)
+            cur.execute("INSERT INTO state(machine, tote1level, tote1tally) VALUES(%s, %s, %s)", (api_request_dict['machine'], int(api_request_dict['tote1level']), int(api_request_dict['tote1tally'])))
+            mysql.connection.commit()
             cur.close()
-            # Check if unverified_token is valid
-            if unverified_token not in str(verified_list):
-                return {'Error': 'invalid credentials'}, 400
+            return redirect(url_for('statedata'))
+        except:
+            cur.close()
+            return {'Error': 'unable to update state'}, 400
 
-            # Determine POST type from 'action'
-            if unverified_action == 'state':
-                try:
-                    cur = mysql.connection.cursor()
-                    cur.execute("INSERT INTO state(machine, tote1level, tote1tally) VALUES(%s, %s, %s)", (api_request_dict['machine'], int(api_request_dict['tote1level']), int(api_request_dict['tote1tally'])))
-                    mysql.connection.commit()
-                    cur.close()
-                    flash('State data updated', 'success')
-                    return redirect(url_for('statedata'))
-                except:
-                    # cur.close()
-                    return {'Error': 'unable to update state'}, 400
+    elif unverified_action == 'process':
+        try:
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO process(machine, filename, modelresult, confidence, computetime) VALUES(%s, %s, %s, %s, %s)", (api_request_dict['machine'], api_request_dict['filename'], int(api_request_dict['modelresult']), int(api_request_dict['confidence']), api_request_dict['computetime']))
+            mysql.connection.commit()
+            cur.close()
+            return redirect(url_for('processdata'))
+        except:
+            cur.close()
+            return {'Error': 'unable to update process'}, 400
+    else:
+        return {'Error': 'invalid action'}, 400
 
-            elif unverified_action == 'process':
-                try:
-                    cur = mysql.connection.cursor()
-                    cur.execute("INSERT INTO process(machine, filename, modelresult, confidence, computetime) VALUES(%s, %s, %s, %s, %s)", (api_request_dict['machine'], api_request_dict['filename'], int(api_request_dict['modelresult']), int(api_request_dict['confidence']), api_request_dict['computetime']))
-                    mysql.connection.commit()
-                    cur.close()
-                    flash('Process data updated', 'success')
-                    return redirect(url_for('processdata'))
-                except:
-                    # cur.close()
-                    return {'Error': 'unable to update process'}, 400
-            else:
-                return {'Error': 'invalid action'}, 400
-
-            return redirect(url_for('dashboard'))
-
-
-api.add_resource(HelloWorld, '/api')
-api.add_resource(myApi, '/api/<string:url_text>')
-
-# # # # # # # # # #
-
-# # API splash screen
-# @app.route('/api/<string:url_text>')
-# def api_splash():
-#     # return print("working")
-#     return {'url': request.url}
-    # return render_template('api_splash.html')
+    return redirect(url_for('index'))
 
 
 # Index
@@ -171,28 +151,18 @@ def statedata():
     # Declare your table
     # this is where you would add more totes
     class ItemTable(Table):
-        id = Col('ID')
+        # id = Col('ID')
         time = Col('Timestamp')
         machine = Col('System ID')
         tote1level = Col('Tote 1 Level')
         tote1tally = Col('Tote 1 Count')
-
-    # Get some objects
-    # this is where you would add more totes
-    class Item(object):
-        def __init__(self, id, time, machine, tote1level, tote1tally):
-            self.id = id
-            self.time = time
-            self.machine = machine
-            self.tote1level = tote1level
-            self.tote1tally = tote1tally
 
     # Load items from your database
     # Create cursor
     cur = mysql.connection.cursor()
 
     # Get data
-    result = cur.execute("SELECT * FROM state")
+    result = cur.execute("SELECT * FROM state ORDER BY id DESC")
     items = cur.fetchall()
 
     # Close connection
@@ -209,31 +179,20 @@ def statedata():
 def processdata():
     # Declare your table
     class ItemTable(Table):
-        id = Col('ID')
+        # id = Col('ID')
         time = Col('Timestamp')
         machine = Col('System ID')
         filename = Col('Filename')
         modelresult = Col('Model Result')
-        confidence = Col('confidence')
+        confidence = Col('Confidence')
         computetime = Col('Compute Time')
-
-    # Get some objects
-    class Item(object):
-        def __init__(self, id, time, machine, tote1level, tote1tally):
-            self.id = id
-            self.time = time
-            self.machine = machine
-            self.filename = tote1level
-            self.modelresult = tote1tally
-            self.confidence = confidence
-            slef.computetime = computetime
 
     # Load items from your database
     # Create cursor
     cur = mysql.connection.cursor()
 
     # Get data
-    result = cur.execute("SELECT * FROM process")
+    result = cur.execute("SELECT * FROM process ORDER BY id DESC")
     items = cur.fetchall()
 
     # Close connection
@@ -394,16 +353,9 @@ def add_article():
         title = form.title.data
         body = form.body.data
 
-        # Create cursor
         cur = mysql.connection.cursor()
-
-        # Execute
         cur.execute("INSERT INTO articles(title, body, author) VALUES(%s, %s, %s)",(title, body, session['username']))
-
-        # Commit to DB
         mysql.connection.commit()
-
-        # Close connection
         cur.close()
 
         flash('Article Created', 'success')
@@ -416,12 +368,8 @@ def add_article():
 @app.route('/edit_article/<string:id>', methods=['GET','POST'])
 @is_logged_in
 def edit_article(id):
-    # Create cursor
     cur = mysql.connection.cursor()
-
-    # Get article by idea
     result = cur.execute("SELECT * FROM articles WHERE id = %s", [id])
-
     article = cur.fetchone()
 
     # Get form
@@ -432,20 +380,13 @@ def edit_article(id):
     form.body.data = article['body']
 
 
-    if request.method == 'POST' and form.validate():
+    if request.method=='POST' and form.validate():
         title = request.form['title']
         body = request.form['body']
 
-        # Create cursor
         cur = mysql.connection.cursor()
-
-        # Execute
         cur.execute("UPDATE articles SET title=%s, body=%s WHERE id = %s", (title, body, id))
-
-        # Commit to DB
         mysql.connection.commit()
-
-        # Close connection
         cur.close()
 
         flash('Article Updated', 'success')
@@ -457,16 +398,9 @@ def edit_article(id):
 @app.route('/delete_article/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_article(id):
-    # Create cursor
     cur = mysql.connection.cursor()
-
-    # execute
     cur.execute("DELETE FROM articles WHERE id = %s", [id])
-
-    # Commit to DB
     mysql.connection.commit()
-
-    # Close connection
     cur.close()
 
     flash('Article Deleted', 'success')
@@ -498,16 +432,9 @@ def add_device():
         longitude = form.longitude.data
         configvariables = form.configvariables.data
 
-        # Create cursor
         cur = mysql.connection.cursor()
-
-        # Execute
         cur.execute("INSERT INTO devicedb(machine, nickname, ip_address, token, latitude, longitude, configvariables) VALUES(%s, %s, %s, %s, %s, %s, %s)", (machine, nickname, ip_address, token, latitude, longitude, configvariables))
-
-        # Commit to DB
         mysql.connection.commit()
-
-        # Close connection
         cur.close()
 
         flash('Device Created', 'success')
@@ -520,12 +447,8 @@ def add_device():
 @app.route('/edit_device/<string:id>', methods=['GET','POST'])
 @is_logged_in
 def edit_device(id):
-    # Create cursor
     cur = mysql.connection.cursor()
-
-    # Get article by idea
     result = cur.execute("SELECT * FROM devicedb WHERE id = %s", [id])
-
     device = cur.fetchone()
 
     # Get form
@@ -549,16 +472,9 @@ def edit_device(id):
         longitude = request.form['longitude']
         configvariables = request.form['configvariables']
 
-        # Create cursor
         cur = mysql.connection.cursor()
-
-        # Execute
         cur.execute("UPDATE devicedb SET machine=%s, nickname=%s, ip_address=%s, token=%s, latitude=%s, longitude=%s, configvariables=%s WHERE id = %s", (machine, nickname, ip_address, token, latitude, longitude, configvariables, id))
-
-        # Commit to DB
         mysql.connection.commit()
-
-        # Close connection
         cur.close()
 
         flash('Device Updated', 'success')
@@ -570,16 +486,9 @@ def edit_device(id):
 @app.route('/delete_device/<string:id>', methods=['POST'])
 @is_logged_in
 def delete_device(id):
-    # Create cursor
     cur = mysql.connection.cursor()
-
-    # execute
     cur.execute("DELETE FROM devicedb WHERE id = %s", [id])
-
-    # Commit to DB
     mysql.connection.commit()
-
-    # Close connection
     cur.close()
 
     flash('Device Deleted', 'success')
@@ -590,13 +499,9 @@ def delete_device(id):
 @app.route('/reset_state', methods=['POST'])
 @is_logged_in
 def reset_state():
-    # Create cursor
     cur = mysql.connection.cursor()
-    # execute
     cur.execute("DELETE FROM state")
-    # Commit to DB
     mysql.connection.commit()
-    # Close connection
     cur.close()
 
     flash('Successfully Reset', 'success')
@@ -607,17 +512,41 @@ def reset_state():
 @app.route('/reset_process', methods=['POST'])
 @is_logged_in
 def reset_process():
-    # Create cursor
     cur = mysql.connection.cursor()
-    # execute
     cur.execute("DELETE FROM process")
-    # Commit to DB
     mysql.connection.commit()
-    # Close connection
     cur.close()
 
     flash('Successfully Reset', 'success')
     return redirect(url_for('dashboard'))
+
+
+@app.route("/chart")
+def bar():
+    labels = [
+        'JAN', 'FEB', 'MAR', 'APR',
+        'MAY', 'JUN', 'JUL', 'AUG',
+        'SEP', 'OCT', 'NOV', 'DEC']
+
+    values = [
+        967.67, 1190.89, 1079.75, 1349.19,
+        2328.91, 2504.28, 2873.83, 4764.87,
+        4349.29, 6458.30, 9907, 16297]
+
+    colors = [
+        "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
+        "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
+        "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
+    bar_labels = labels
+    bar_values = values
+    return render_template('bar_chart.html', title='Bitcoin Monthly Price in USD', max=17000, labels=bar_labels, values=bar_values)
+
+
+@app.route("/beta")
+def bar_beta():
+
+
+    return render_template('beta.html')
 
 
 if __name__ == '__main__':

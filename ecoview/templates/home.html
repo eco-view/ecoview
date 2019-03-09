@@ -1,13 +1,112 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<link rel="shortcut icon" href="{{ url_for('static', filename='/static/favicon.ico') }}">
-<div class="jumbotron text-center">
+<div class="jumbotron-fluid text-center">
+
   <h1>Welcome to EcoView</h1>
+  <h1>♳ ♴ ♵ 📸 ♶ ♷ ♸</h1>
   <p class="lead">EE494 Capstone Design, Spring 2019</p>
+
   {% if session.logged_in == NULL %}
   <a href="/register"class="btn btn-outline-dark">Register</a>
   <a href="/login"class="btn btn-outline-dark">Login</a>
   {% endif %}
 </div>
+
+
+<!-- EMBED VISUALS HERE -->
+
+<!-- <img class="img-thumbnail float-left" src="https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png">
+<img class="img-thumbnail float-right" src="https://upload.wikimedia.org/wikipedia/en/7/7d/Lenna_%28test_image%29.png"> -->
+
+<div>
+<!-- TOP GAUGE CHART(S) -->
+<canvas id="myChart" width="600" height="100"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+  Chart.defaults.scale.gridLines.display = false;
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'bar',
+
+      // The data for our dataset
+      data: {
+          labels: ["PET", "HDPE", "PVC", "LDPE", "PP", "PS"],
+          datasets: [{
+              label: "My First dataset",
+              backgroundColor: 'rgb(100, 100, 255)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [15, 45, 5, 2, 20, 30],
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+</script>
+</div>
+
+
+
+<table>
+  <tr>
+    <td>
+      <!-- BOTTOM LEFT CHART -->
+      <canvas id="myChart_Lower_Left" width="550" height="350" class="float-left"></canvas>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+      <script>
+        Chart.defaults.scale.gridLines.display = false;
+        var ctx = document.getElementById('myChart_Lower_Left').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [{
+                    label: "My Second dataset",
+                    backgroundColor: 'rgb(135, 210, 134)',
+                    borderColor: 'rgb(85, 192, 41)',
+                    data: [5, 10, 25, 50, 25, 10, 5],
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+      </script>
+    </td>
+    <td>
+      <!-- BOTTOM LEFT CHART -->
+      <canvas id="myChart_Lower_Right" width="550" height="350" class="float-right"></canvas>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+      <script>
+        Chart.defaults.scale.gridLines.display = false;
+        var ctx = document.getElementById('myChart_Lower_Right').getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create
+            type: 'line',
+
+            // The data for our dataset
+            data: {
+                labels: ["January", "February", "March", "April", "May", "June", "July"],
+                datasets: [{
+                    label: "My third dataset",
+                    backgroundColor: 'rgb(135, 210, 134)',
+                    borderColor: 'rgb(85, 192, 41)',
+                    data: [0, 2, 10, 25, 50, 100, 200],
+                }]
+            },
+
+            // Configuration options go here
+            options: {}
+        });
+      </script>
+    </td>
+  </tr>
+</table>
+
+<!-- END OF VISUALS -->
 {% endblock %}

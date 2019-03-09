@@ -5,15 +5,19 @@
 <hr>
 <table>
 <tr>
-  <td><a class="btn btn-success" href="/add_device">Add Device</a></td>
-  <td><a class="btn btn-success" href="/add_article">Add Article</a></td>
+  <td><a class="btn btn-outline-success" href="/add_device">Add Device</a></td>
+  <td><a class="btn btn-outline-success" href="/add_article">Add Article</a></td>
+
+  <td><a class="btn btn-outline-primary" href="/api/token=abcde-action=state-machine=10001-tote1level=0-tote1tally=0">API Test-State</a></td>
+  <td><a class="btn btn-outline-primary" href="/api/token=abcde-action=process-machine=10001-filename=img001-modelresult=0-confidence=0-computetime=0">API Test-Process</a></td>
+
   <td><form action="{{url_for('reset_state')}}" method="post">
   <input type="hidden" name="_method" value="DELETE">
-  <input type="submit" value="Reset State" class="btn btn-danger">
+  <input type="submit" value="Reset State" class="btn btn-outline-secondary">
   </form></td>
   <td><form action="{{url_for('reset_process')}}" method="post">
   <input type="hidden" name="_method" value="DELETE">
-  <input type="submit" value="Reset Process" class="btn btn-danger">
+  <input type="submit" value="Reset Process" class="btn btn-outline-secondary">
   </form></td>
 </tr>
 </table>
@@ -48,7 +52,7 @@
     <td>
 <form action="{{url_for('delete_device', id=device.id)}}" method="post">
 <input type="hidden" name="_method" value="DELETE">
-<input type="submit" value="DELETE" class="btn btn-danger">
+<input type="submit" value="DELETE" class="btn btn-outline-danger">
 </form>
     </td>
     <td></td>
@@ -78,7 +82,7 @@
     <td>
 <form action="{{url_for('delete_article', id=article.id)}}" method="post">
 <input type="hidden" name="_method" value="DELETE">
-<input type="submit" value="DELETE" class="btn btn-danger">
+<input type="submit" value="DELETE" class="btn btn-outline-danger">
 </form>
     </td>
     <td></td>

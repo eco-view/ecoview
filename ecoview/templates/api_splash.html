@@ -2,11 +2,76 @@
 
 {% block body %}
 
-<!-- <img src="https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/SAKGwKC/cartoon-cloud-animation-with-loop_v211ezdke__F0005.png" width="30" height="30" class="d-inline-block align-top" alt=""> -->
-<!-- {{ some_json }} -->
-{{ unverified_text }}
-<!-- *** this code forces a download. figure out why *** -->
+<!-- API JSON -->
+<hr>
+<p>info = {<br />
+ <ul>about:  ecoview is a cloud-based recycling project</ul>
+ <ul>api:  ecoview employs a URL-based protocol for automatic data entry</ul>
+ <ul>access:  /api/...</ul>
+ <ul>assign:  =</ul>
+ <ul>separator:  -</ul>
+}<br />
+</p>
+
+<p>state_syntax = {<br />
+ <ul>action:  state</ul>
+ <ul>token:  STRING</ul>
+ <ul>machine:  INT</ul>
+ <ul>tote1level:  INT</ul>
+ <ul>tote1tally:  INT</ul>
+}<br />
+</p>
+
+<p>process_syntax = {<br />
+ <ul>action:  state</ul>
+ <ul>token:  STRING</ul>
+ <ul>machine:  INT</ul>
+ <ul>filename:  STRING</ul>
+ <ul>modelresult:  INT</ul>
+ <ul>confidence:  INT</ul>
+ <ul>computetime:  STRING</ul>
+}<br />
+</p>
+
+<p>examples = {<br />
+ <ul>state:  http://localhost:8080/api/token=abcde-action=state-machine=10001-tote1level=71-tote1tally=80</ul>
+ <ul>process:  http://localhost:8080/api/token=abcde-action=process-machine=10001-filename=img001-modelresult=1-confidence=91-computetime=4</ul>
+}<br />
+</p>
+
+{% endblock %}
+
+<!-- *** this url forces a download. figure out why *** -->
 <!-- <div class="embed-responsive embed-responsive-16by9">
   <iframe class="embed-responsive-item" src="https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/SAKGwKC/cartoon-cloud-animation-with-loop_v211ezdke__F0005.png" allowfullscreen></iframe>
 </div> -->
-{% endblock %}
+
+
+
+<!-- info = {
+'about': 'ecoview is a cloud-based recycling project'
+'api': 'ecoview employs a URL-based protocol for automatic data entry', 'access': '/api/...', 'assign': '=', 'delimit': '-'
+}
+
+state_syntax = {
+'action': 'state'
+'token': '<STRING>'
+'machine': '<INT>'
+'tote1level': '<INT>'
+'tote1tally': '<INT>'
+}
+
+process_syntax = {
+'action': 'process'
+'token': '<STRING>'
+'machine': '<INT>'
+'filename': '<STRING>'
+'modelresult': '<INT>'
+'confidence': '<INT>'
+'computetime': '<STRING>'
+}
+
+examples = {
+'state': 'http://localhost:8080/api/token=abcde-action=state-machine=10001-tote1level=71-tote1tally=80'
+'process': 'http://localhost:8080/api/token=abcde-action=process-machine=10001-filename=img001-modelresult=1-confidence=91-computetime=4'
+} -->
