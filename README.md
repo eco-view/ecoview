@@ -74,7 +74,7 @@ Add additional notes about how to deploy this on a live system
 * [Python](https://www.python.org/) - Primary language
 * [Heroku](https://www.heroku.com/) - Server backend
 * [Flask](http://flask.pocoo.org/) - Web framework
-* [MySQL](https://www.mysql.com/) - Used to manage database
+* [MySQL](https://www.mysql.com/) - Database
 * [Tensorflow](https://www.tensorflow.org/) - Image processing
 * [Bootstrap](https://getbootstrap.com/) - Visual styling
 
