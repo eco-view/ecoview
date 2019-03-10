@@ -37,7 +37,15 @@ mysql = MySQL(app)
 # API SPLASH
 @app.route('/api')
 def api_splash():
-    return render_template('api_splash.html')
+    info = {'about': 'ecoview is a cloud-based recycling project', 'api': 'ecoview employs a URL-based assign/delimit protocol for automatic data entry', 'access': 'url_root/api/<...>', 'assign': '=', 'delimit': '-'}
+    state_syntax = {'action': 'state', 'token': '<STRING>', 'machine': '<INT>', 'tote1level': '<INT>', 'tote1tally': '<INT>', 'tote2level': '<INT>', 'tote2tally': '<INT>', 'tote3level': '<INT>', 'tote3tally': '<INT>', 'tote4level': '<INT>', 'tote4tally': '<INT>', 'tote5level': '<INT>', 'tote5tally': '<INT>', 'tote6level': '<INT>', 'tote6tally': '<INT>'}
+    process_syntax = {'action': 'process', 'token': '<STRING>', 'machine': '<INT>', 'filename': '<STRING>', 'modelresult': '<INT>', 'confidence': '<INT>', 'computetime': '<STRING>'}
+    examples = {'state EXAMPLE': 'http://localhost:8080/api/token=abcde-action=state-machine=10001-t1lv=11-t1tl=1-t2lv=22-t2tl=2-t3lv=33-t3tl=3-t4lv=44-t4tl=4-t5lv=55-t5tl=5-t6lv=66-t6tl=6',
+    'process EXAMPLE': 'http://localhost:8080/api/token=abcde-action=process-machine=10001-filename=img00001-modelresult=1-confidence=100-computetime=4'}
+    calling_card =  jsonify([info, state_syntax, process_syntax, examples])
+
+    return calling_card
+    # return render_template('api_splash.html', calling_card=calling_card)
 
 
 # api POST method
@@ -51,7 +59,7 @@ def api_post(path, methods='GET'):
         keys, values = zip(*(s.split("=") for s in key_value_list))
         api_request_dict = dict(zip(keys, values))
     except:
-        return {'Error': 'unable to parse request'}, 400
+        return "Error: unable to parse request", 400
 
     # Check if potential verification pairs are present
     try:
@@ -59,7 +67,7 @@ def api_post(path, methods='GET'):
         unverified_action = api_request_dict['action']
         # unverified_machine = api_request_dict['machine']
     except:
-        return {'Error': 'insufficient credentials'}, 400
+        return "Error: insufficient credentials", 400
 
     # Verify credentials
     cur = mysql.connection.cursor()
@@ -69,19 +77,19 @@ def api_post(path, methods='GET'):
     cur.close()
     # Check if unverified_token is valid
     if unverified_token not in str(verified_list):
-        return {'Error': 'invalid credentials'}, 400
+        return "Error: invalid credentials", 400
 
     # Determine POST type from 'action'
     if unverified_action == 'state':
         try:
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO state(machine, tote1level, tote1tally) VALUES(%s, %s, %s)", (api_request_dict['machine'], int(api_request_dict['tote1level']), int(api_request_dict['tote1tally'])))
+            cur.execute("INSERT INTO state(machine, tote1level, tote1tally, tote2level, tote2tally, tote3level, tote3tally, tote4level, tote4tally, tote5level, tote5tally, tote6level, tote6tally) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", (api_request_dict['machine'], int(api_request_dict['t1lv']), int(api_request_dict['t1tl']), int(api_request_dict['t2lv']), int(api_request_dict['t2tl']), int(api_request_dict['t3lv']), int(api_request_dict['t3tl']), int(api_request_dict['t4lv']), int(api_request_dict['t4tl']), int(api_request_dict['t5lv']), int(api_request_dict['t5tl']), int(api_request_dict['t6lv']), int(api_request_dict['t6tl'])))
             mysql.connection.commit()
             cur.close()
             return redirect(url_for('statedata'))
         except:
             cur.close()
-            return {'Error': 'unable to update state'}, 400
+            return "Error: unable to update state", 400
 
     elif unverified_action == 'process':
         try:
@@ -92,9 +100,9 @@ def api_post(path, methods='GET'):
             return redirect(url_for('processdata'))
         except:
             cur.close()
-            return {'Error': 'unable to update process'}, 400
+            return "Error: unable to update process", 400
     else:
-        return {'Error': 'invalid action'}, 400
+        return "Error: invalid action", 400
 
     return redirect(url_for('index'))
 
@@ -102,7 +110,70 @@ def api_post(path, methods='GET'):
 # Index
 @app.route('/')
 def index():
-    return render_template('home.html')
+    colors = [
+    "#FCB712", "#F37020", "#CD004D", "#6460AC",
+    "#008AD2", "#0CB14B"]
+
+    cur = mysql.connection.cursor()
+    result = cur.execute("SELECT tote1level, tote2level, tote3level, tote4level, tote5level, tote6level FROM state ORDER BY id DESC LIMIT 0, 1")
+    current_levels = cur.fetchone()
+    cur.close()
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT modelresult FROM process")
+    results = cur.fetchall()
+    cur.close()
+    result_list = [item['modelresult'] for item in results]
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT tote1tally, tote2tally, tote3tally, tote4tally, tote5tally, tote6tally FROM state ORDER BY id DESC LIMIT 0, 1")
+    tallys = cur.fetchone()
+    cur.close()
+    if tallys is not None:
+        tally_list = list(tallys.values())
+    else:
+        tally_list = [0, 0, 0, 0, 0, 0, 0]
+
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT id, time, tote1level, tote2level, tote3level, tote4level, tote5level, tote6level FROM state")
+    history = cur.fetchall()
+    cur.close()
+
+    id_list = []
+    time_list = []
+    tote1_list = []
+    tote2_list = []
+    tote3_list = []
+    tote4_list = []
+    tote5_list = []
+    tote6_list = []
+
+    if history is not None:
+        for item in history:
+            id_list.append(item['id'])
+            time_list.append(item['time'])
+            tote1_list.append(item['tote1level'])
+            tote2_list.append(item['tote2level'])
+            tote3_list.append(item['tote3level'])
+            tote4_list.append(item['tote4level'])
+            tote5_list.append(item['tote5level'])
+            tote6_list.append(item['tote6level'])
+
+    num_0 = result_list.count(0)
+    num_1 = result_list.count(1)
+    num_2 = result_list.count(2)
+    num_3 = result_list.count(3)
+    num_4 = result_list.count(4)
+    num_5 = result_list.count(5)
+    num_6 = result_list.count(6)
+    model_list = [num_1, num_2, num_3, num_4, num_5, num_6, num_0]
+
+    if result > 0:
+        level_list = list(current_levels.values())
+    else:
+        level_list = [1, 1, 1, 1, 1, 1]
+
+    return render_template('home.html', level_list=level_list, colors=colors, model_list=model_list, tally_list=tally_list, id_list=id_list, tote1_list=tote1_list, tote2_list=tote2_list, tote3_list=tote3_list, tote4_list=tote4_list, tote5_list=tote5_list, tote6_list=tote6_list, time_list=time_list)
 
 
 # About
@@ -155,19 +226,26 @@ def statedata():
         time = Col('Timestamp')
         machine = Col('System ID')
         tote1level = Col('Tote 1 Level')
+        tote2level = Col('Tote 2 Level')
+        tote3level = Col('Tote 3 Level')
+        tote4level = Col('Tote 4 Level')
+        tote5level = Col('Tote 5 Level')
+        tote6level = Col('Tote 6 Level')
         tote1tally = Col('Tote 1 Count')
+        tote2tally = Col('Tote 2 Count')
+        tote3tally = Col('Tote 3 Count')
+        tote4tally = Col('Tote 4 Count')
+        tote5tally = Col('Tote 5 Count')
+        tote6tally = Col('Tote 6 Count')
 
     # Load items from your database
     # Create cursor
     cur = mysql.connection.cursor()
-
     # Get data
     result = cur.execute("SELECT * FROM state ORDER BY id DESC")
     items = cur.fetchall()
-
     # Close connection
     cur.close()
-
     # Populate the table
     table = ItemTable(items)
 
@@ -521,30 +599,8 @@ def reset_process():
     return redirect(url_for('dashboard'))
 
 
-@app.route("/chart")
-def bar():
-    labels = [
-        'JAN', 'FEB', 'MAR', 'APR',
-        'MAY', 'JUN', 'JUL', 'AUG',
-        'SEP', 'OCT', 'NOV', 'DEC']
-
-    values = [
-        967.67, 1190.89, 1079.75, 1349.19,
-        2328.91, 2504.28, 2873.83, 4764.87,
-        4349.29, 6458.30, 9907, 16297]
-
-    colors = [
-        "#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA",
-        "#ABCDEF", "#DDDDDD", "#ABCABC", "#4169E1",
-        "#C71585", "#FF4500", "#FEDCBA", "#46BFBD"]
-    bar_labels = labels
-    bar_values = values
-    return render_template('bar_chart.html', title='Bitcoin Monthly Price in USD', max=17000, labels=bar_labels, values=bar_values)
-
-
 @app.route("/beta")
-def bar_beta():
-
+def beta():
 
     return render_template('beta.html')
 

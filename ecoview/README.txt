@@ -4,11 +4,13 @@ SHOW DATABASES;
 USE myflaskapp;
 SHOW TABLES;
 
-CREATE TABLE process (id INT(11) AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(11), filename VARCHAR(100), modelresult INT(11), confidence INT(11), computetime VARCHAR(111));
+CREATE users (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100), email VARCHAR(100), username VARCHAR(30), password VARCHAR(100) register_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
 
-CREATE TABLE state (id INT(11) AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(100), tote1level INT(11), tote1tally INT(11));
+CREATE TABLE process (id INT AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(11), filename VARCHAR(100), modelresult INT(11), confidence INT(11), computetime INT(11));
 
-CREATE TABLE devicedb (id INT(11) AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(11), nickname VARCHAR(30), ip_address VARCHAR(50), token VARCHAR(20), latitude VARCHAR(100), longitude VARCHAR(100), configvariables  VARCHAR(100));
+CREATE TABLE state (id INT AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(100), tote1level INT(11), tote1tally INT(11), tote2level INT(11), tote2tally INT(11), tote3level INT(11), tote3tally INT(11), tote4level INT(11), tote4tally INT(11), tote5level INT(11), tote5tally INT(11), tote6level INT(11), tote6tally INT(11));
+
+CREATE TABLE devicedb (id INT AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(11), nickname VARCHAR(30), ip_address VARCHAR(50), token VARCHAR(20), latitude VARCHAR(100), longitude VARCHAR(100), configvariables  VARCHAR(100));
 
 mysql> DESCRIBE state;
 +------------+--------------+------+-----+-------------------+-------------------+
@@ -251,3 +253,67 @@ function(argument){
 #
 # api.add_resource(HelloWorld, '/api')
 # api.add_resource(myApi, '/api/<string:url_text>')
+
+###### history = json.dumps(results, indent=4, sort_keys=True, default=str) #### dump JSON to string
+
+
+
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron-fluid text-center">
+
+  <h1>Welcome to EcoView</h1>
+  <h1>♳ ♴ ♵ 📸 ♶ ♷ ♸</h1>
+  <p class="lead">EE494 Capstone Design, Spring 2019</p>
+
+  {% if session.logged_in == NULL %}
+  <a href="/register"class="btn btn-outline-dark">Register</a>
+  <a href="/login"class="btn btn-outline-dark">Login</a>
+  {% endif %}
+</div>
+
+
+<!-- EMBED VISUALS HERE -->
+
+<div>
+<!-- TOP GAUGE CHART(S) -->
+<canvas id="myChart" width="600" height="100"></canvas>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+  Chart.defaults.scale.gridLines.display = false;
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'bar',
+
+      // The data for our dataset
+      data: {
+          labels: ["PET", "HDPE", "PVC", "LDPE", "PP", "PS"],
+          datasets: [{
+              label: "My First dataset",
+              backgroundColor: 'rgb(100, 100, 255)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [15, 45, 5, 2, 20, 30],
+          }]
+      },
+
+      // Configuration options go here
+      options: {}
+  });
+</script>
+</div>
+<!-- END OF VISUALS -->
+
+{{ "this is a test" }}
+
+{{ current_levels }}
+
+
+
+
+
+
+
+
+{% endblock %}
