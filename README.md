@@ -1,3 +1,5 @@
+<img width="1440" alt="Screen Shot 2019-03-10 at 6 48 19 AM" src="https://user-images.githubusercontent.com/46664545/54083926-90358b80-4300-11e9-980c-6169ab2a98df.png">
+
 # :recycle: ecoview :recycle:
 
 Cloud-based recycling module with object classification
