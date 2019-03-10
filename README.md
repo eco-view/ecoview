@@ -24,7 +24,7 @@ pip install flask flask_restful flask_mysql flask_mysqldb flask_table wtforms pa
 Clone the repository to a local directory
 
 ```
-git clone ecoview
+git clone https://github.com/eco-view/ecoview.git
 ```
 
 Initialize SQL database
