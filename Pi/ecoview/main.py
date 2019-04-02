@@ -17,7 +17,7 @@ import sys
 print("\nRUNNING main.py [CTRL+C TO EXIT]\n")
 
 Log = Logger(GlobalLogging=False)   # False: LogToConsole   True: LogToLog
-MyURL = CreateURL(url_root="http://192.168.1.3:5000/api/", token="abcde", machine=10001, Logging=True)
+MyURL = CreateURL(url_root="http://192.168.1.3:8080/api/", token="abcde", machine=10001, Logging=True)
 Tote0 = Tote(Number=0, SWITCHpin=17, BEAMpin=None, TRIGpin=None, ECHOpin=None)
 Tote1 = Tote(Number=1, SWITCHpin=27, BEAMpin=None, TRIGpin=19, ECHOpin=None)
 Tote2 = Tote(Number=2, SWITCHpin=22, BEAMpin=None, TRIGpin=19, ECHOpin=None)
