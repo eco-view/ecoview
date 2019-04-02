@@ -1,0 +1,1 @@
+{'Tote2': 0, 'Tote0': 2, 'Tote1': 219, 'Tote3': 0, 'Tote4': 9, 'Tote5': 0, 'Tote6': 0}

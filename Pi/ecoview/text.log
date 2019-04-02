@@ -1,0 +1,42 @@
+
+RUNNING main.py [CTRL+C TO EXIT]
+
+Started: 2019-04-02 06:09:39
+
+	Ready	2019-04-02 06:09:39
+Picture Taken 📸
+IMAGE FOR MODEL: /home/pi/Desktop/ecoview/images/cache/2019.04.02_020942.jpg
+	[$] Model Result: [3]
+[STARTING TIMER: 6 seconds]
+	SWITCH #0 pushed
+		UserResult: 0
+Target Directory: 0
+	Last File: 2019.04.02_020942.jpg
+URL: http://192.168.1.3:5000/api/machine=10001-token=abcde-filename=2019.04.02_020942.jpg-computetime=0-action=process-modelresult=3-confidence=0
+		[STATUS: 200] ✅
+
+	Ready	2019-04-02 06:09:45
+Picture Taken 📸
+IMAGE FOR MODEL: /home/pi/Desktop/ecoview/images/cache/2019.04.02_020946.jpg
+	[$] Model Result: [1]
+[STARTING TIMER: 6 seconds]
+	[TIMEOUT]
+		UserResult: None
+Target Directory: NOID
+	Last File: 2019.04.02_020946.jpg
+URL: http://192.168.1.3:5000/api/machine=10001-token=abcde-filename=2019.04.02_020946.jpg-computetime=0-action=process-modelresult=1-confidence=0
+		[STATUS: 200] ✅
+
+	Ready	2019-04-02 06:09:53
+Picture Taken 📸
+IMAGE FOR MODEL: /home/pi/Desktop/ecoview/images/cache/2019.04.02_020954.jpg
+	[$] Model Result: [5]
+[STARTING TIMER: 6 seconds]
+	SWITCH #1 pushed
+		UserResult: 1
+Target Directory: 1
+	Last File: 2019.04.02_020954.jpg
+URL: http://192.168.1.3:5000/api/machine=10001-token=abcde-filename=2019.04.02_020954.jpg-computetime=0-action=process-modelresult=5-confidence=1
+		[STATUS: 200] ✅
+
+	Ready	2019-04-02 06:09:58
