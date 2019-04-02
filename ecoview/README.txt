@@ -1,5 +1,11 @@
 %% MySQL -- terminal commands
 
+mysql.server start
+mysql -u root -p
+>> ee494
+USE myflaskapp;
+
+
 SHOW DATABASES;
 USE myflaskapp;
 SHOW TABLES;
