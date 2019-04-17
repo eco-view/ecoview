@@ -2,6 +2,7 @@
 ```bash
 mysql.server start
 mysql -uroot -pee494
+SHOW DATABASES;
 USE myflaskapp;
 ```
 
