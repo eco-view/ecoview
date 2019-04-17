@@ -1,4 +1,4 @@
-# MySQL -- terminal commands
+# MySQL Configuration
 ```bash
 mysql.server start
 mysql -u root -p
