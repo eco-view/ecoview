@@ -1,0 +1,5 @@
+numpy
+RPi.GPIO
+picamera
+urllib3
+timeout-decorator
