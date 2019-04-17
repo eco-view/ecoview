@@ -3,7 +3,8 @@
 mysql.server start
 mysql -uroot -pee494
 SHOW DATABASES;
-USE myflaskapp;
+# if 'myflaskapp' is not yet created:
+CREATE DATABASE myflaskapp;
 ```
 
 ```bash
