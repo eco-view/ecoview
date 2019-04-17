@@ -35,6 +35,22 @@ CREATE TABLE state (id INT AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CU
 CREATE TABLE devicedb (id INT AUTO_INCREMENT PRIMARY KEY, time TIMESTAMP DEFAULT CURRENT_TIMESTAMP, machine VARCHAR(11), nickname VARCHAR(30), ip_address VARCHAR(50), token VARCHAR(20), latitude VARCHAR(100), longitude VARCHAR(100), configvariables  VARCHAR(100));
 
 ```
+
+```bash
+mysql> DESCRIBE users;
++---------------+--------------+------+-----+-------------------+-------------------+
+| Field         | Type         | Null | Key | Default           | Extra             |
++---------------+--------------+------+-----+-------------------+-------------------+
+| id            | int(11)      | NO   | PRI | NULL              | auto_increment    |
+| name          | varchar(100) | YES  |     | NULL              |                   |
+| email         | varchar(100) | YES  |     | NULL              |                   |
+| username      | varchar(30)  | YES  |     | NULL              |                   |
+| password      | varchar(100) | YES  |     | NULL              |                   |
+| register_date | timestamp    | YES  |     | CURRENT_TIMESTAMP | DEFAULT_GENERATED |
++---------------+--------------+------+-----+-------------------+-------------------+
+6 rows in set (0.00 sec)
+```
+
 ```
 mysql> DESCRIBE state;
 +------------+--------------+------+-----+-------------------+-------------------+
