@@ -1,1 +1,7 @@
-### RasPi Scripts
+# RasPi Scripts :strawberry:
+
+```bash
+
+  python3 main.py
+
+```
