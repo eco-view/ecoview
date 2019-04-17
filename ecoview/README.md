@@ -1,8 +1,7 @@
 # MySQL Configuration
 ```bash
 mysql.server start
-mysql -u root -p
->> ee494
+mysql -uroot -pee494
 USE myflaskapp;
 ```
 
