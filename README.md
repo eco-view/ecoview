@@ -12,69 +12,49 @@ UB Electrical Engineering Capstone Design, Spring 2019
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Dependencies
-
-Make sure you have all the required python modules
-```
-pip install flask flask_restful flask_mysql flask_mysqldb flask_table wtforms passlib functools json
-```
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. Real-world deployement performed with Docker.
 
 ### Installing
 
 Clone the repository to a local directory
 
 ```
-git clone https://github.com/eco-view/ecoview.git
+  git clone https://github.com/eco-view/ecoview.git
+```
+
+### Dependencies
+
+Make sure you have all the required python modules
+```
+  pip3 install -r requirements.txt
 ```
 
 Initialize SQL database
 
 ```
-mysql.server start
+  mysql.server start
 ```
 
 Start the flask server
 
 ```
-python3 app.py
+  python3 app.py
 ```
 
 By default, the server will run on port 8080
 
 ```
-http://localhost:8080/
+  http://localhost:8080/
 ```
 
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+todo
 
 ## Built With
 
 * [Python](https://www.python.org/) - Primary language
-* [Heroku](https://www.heroku.com/) - Server backend
 * [Flask](http://flask.pocoo.org/) - Web framework
 * [MySQL](https://www.mysql.com/) - Database
 * [Tensorflow](https://www.tensorflow.org/) - Image processing
@@ -82,11 +62,11 @@ Add additional notes about how to deploy this on a live system
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+This project was created for use within our Capstone project and will not be accepting pull requests from outside individuals.
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+ecoview:latest
 
 ## Authors
 
@@ -114,6 +94,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* much love to the folks at StackOverflow
+
