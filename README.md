@@ -72,9 +72,9 @@ ecoview:latest
 ## Authors
 
 * **Michael Lawrenson** - *Software Lead* - [minelminel](https://github.com/minelminel)
-* **Osama Abaali** - *Image Lead* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Lee Yanting** - *IPeripherals Lead* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Justin Struzik** - *Microcontroller Lead* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Osama Abaali** - *Image Lead* - 
+* **Lee Yanting** - *Peripherals Lead* - 
+* **Justin Struzik** - *Microcontroller Lead* - 
 
 
 
