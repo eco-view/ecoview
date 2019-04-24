@@ -13,21 +13,26 @@ UB Electrical Engineering Capstone Design, Spring 2019
 
 ## Overview
 #### Abstract
-lipsum
+Raspberry Pi integrated with a compartmentalized recycling station, capable of monitoring deposits in individual *totes*, measuring the height of *tote* contents, and relaying this information to our web app via our API. In addition, the user can capture a photo of their recycleable and provide a categorical assignment by examining the symbol located on the underside. This resulting collection of crowdsourced images is aggregated and used as training data for our convolution neural network, or *CNN*.
 #### Architecture
-lipsum
+Content height is measured with ultrasonic sensors, which measure the time needed to echo a trigger signal. Deposits are registed by means of continuosly monitored infrared break beams. At regular time intervals, collected information stored in-memory is used to construct an API request, syncronizing the web app with the physical system. Image files are stored in a heirarchy such that directory names are the ground-truth classification labels.
 #### Setup
-lipsum
+There are 3 main program branches:
+- Firmware, run locally on the Pi
+- Web app, run in a Docker container
+- Image Analysis, eventually to be performed with Google Colaboratory
 
 ## Stack
 #### Website
-lipsum
+- Framework: Flask
+- Styling: Bootstrap
+- Graphics: Chartist.js
 #### Database
-lipsum
+- MySQL
 #### Image Processing
-lipsum
+- Tensorflow
 #### Communication
-lipsum
+- restful API:  ecoview.stateData(), ecoview.processData()
 
 
 ## Overview
@@ -70,7 +75,11 @@ By default, the server will run on port 8080
 
 ## Deployment
 
-todo
+```
+docker build ecoview:latest .
+docker run -d -p 8080:8080 ecoview:latest
+echo 'Running [ecoview] @ http://localhost:8080
+```
 
 ## Built With
 
@@ -82,27 +91,15 @@ todo
 
 ## Contributing
 
-This project was created for use within our Capstone project and will not be accepting pull requests from outside individuals.
+*no outside contribution*
 
 ## Versioning
 
 ecoview:latest
 
-## Authors
+## Author
 
 * **Michael Lawrenson** - *Software Lead* - [minelminel](https://github.com/minelminel)
-
-
-### Overview
-- Abstract
-- Architecture
-- Setup
-
-### Stack
-- Website
-– Database
-- Image Processing
-- Communication
 
 ## License
 
