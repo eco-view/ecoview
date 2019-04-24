@@ -11,7 +11,26 @@ UB Electrical Engineering Capstone Design, Spring 2019
 - Peripherals Lead: Lee Yanting
 - Microcontroller Lead: Justin Struzik
 
-## Getting Started
+## Overview
+#### Abstract
+lipsum
+#### Architecture
+lipsum
+#### Setup
+lipsum
+
+## Stack
+#### Website
+lipsum
+#### Database
+lipsum
+#### Image Processing
+lipsum
+#### Communication
+lipsum
+
+
+## Overview
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. Real-world deployement performed with Docker.
 
